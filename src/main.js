@@ -84,43 +84,15 @@ $(function () {
 
 
       svg.append("g")
-        .attr("class", "x axis")
+        .attr("class", "x axis xaxis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
         .append("text")
-        .attr("class", "label")
-        .attr("x", width)
-        .attr("y", -6)
-        .style("text-anchor", "end")
-        .text("Sepal Width (cm)");
-      /**
-     * Brush
-     */
-
-
-
-    var brush = d3.select(".scatter-plot svg");
-
-    height = height + 120;
-
-    brush.append("g")
-        .attr("class", "axis axis--grid")
-        .attr("transform", "translate("+ margin.left +"," + height + ")")
-        .call(d3.axisBottom(xBrush)
-            .ticks(DEFAULTS.x_tick_count));
-
-    brush.append("g")
-        .attr("class", "axis axis--x")
-        .attr("transform", "translate("+ margin.left +"," + height + ")")
-        .call(d3.axisBottom(xBrush));
-
-    brush.append("g")
-        .attr("transform", "translate("+ margin.left +"," + height + ")")
-        .attr("class", "brush")
-        .call(d3.brushX()
-            .extent([[0, -50], [width, 0]])
-            .on("end", brushended));
-
+          .attr("class", "label")
+          .attr("x", width)
+          .attr("y", -6)
+          .style("text-anchor", "end")
+          .text("Sepal Width (cm)");
 
       svg.append("g")
         .attr("class", "y axis")
@@ -132,6 +104,35 @@ $(function () {
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Sepal Length (cm)")
+
+
+        /**
+       * Brush
+       */
+
+      var brush = d3.select(".scatter-plot svg");
+
+      height = height + 120;
+
+      brush.append("g")
+          .attr("class", "axis axis--grid")
+          .attr("transform", "translate("+ margin.left +"," + height + ")")
+          .call(d3.axisBottom(xBrush)
+              .ticks(DEFAULTS.x_tick_count));
+
+      brush.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate("+ margin.left +"," + height + ")")
+          .call(d3.axisBottom(xBrush));
+
+      brush.append("g")
+          .attr("transform", "translate("+ margin.left +"," + height + ")")
+          .attr("class", "brush")
+          .call(d3.brushX()
+              .extent([[0, -50], [width, 0]])
+              .on("end", brushended));
+
+
 
       svg.selectAll(".dot")
         .data(data)
@@ -152,9 +153,6 @@ $(function () {
         var selection = d3.event.selection;
         x.domain(selection.map(xBrush.invert, xBrush));
 
-        console.log("working....");
-
-
         svg.selectAll(".dot")
           .attr("transform", function (d) {
             var x1 = x(d.case_days_to_death),
@@ -164,9 +162,10 @@ $(function () {
           })
           .classed("hide", function(d) {
             var x1 = x(d.case_days_to_death);
-
             return x1 < 0;
           });
+
+          svg.select(".xaxis").call(xAxis);
       }
 
       // var legend = svg.selectAll(".legend-wrapper")
