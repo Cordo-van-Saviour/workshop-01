@@ -49,6 +49,13 @@ $(function () {
         width = DEFAULTS.graph_width - margin.left - margin.right,
         height = DEFAULTS.graph_height - margin.top - margin.bottom;
 
+
+        _.forEach(STAGES, function (data) {
+            console.log("working....");
+            $('.legend-wrapper').append('<input type="checkbox" class="cwite" name="' + data + '">');
+            $('.legend-wrapper').append('<label class="cwite" for="' + data + '">' + data + '</label><br>');
+        })
+
 // append the svg object to the body of the page
 // append a 'group' element to 'svg'
 // moves the 'group' element to the top left margin

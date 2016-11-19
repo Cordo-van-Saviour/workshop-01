@@ -28,12 +28,14 @@ h3 {
 
 .legend-wrapper {
     width: 500px;
-    display: flex;
+    display: block;
+    float: left;
     font-size: 13px;
 }
 
 .scatter-plot {
-    display: flex;
+  display: block;
+  float: left;
 
     width: 800px;
     height: 700px;
@@ -78,6 +80,10 @@ h3 {
     margin: -1px 0 0 0;
     top: 100%;
     left: 0;
+}
+
+.cwite {
+  color: white;
 }
 
 .axis {
