@@ -79,36 +79,56 @@ $(function () {
       })]);
 
       svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis)
-        .append("text")
-        .attr("class", "label")
-        .attr("x", width)
-        .attr("y", -6)
-        .style("text-anchor", "end")
-        .text("Sepal Width (cm)");
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("x", width)
+      .attr("y", -6)
+      .style("text-anchor", "end")
+      .text("Sepal Width (cm)");
 
       svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis)
-        .append("text")
-        .attr("class", "label")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text("Sepal Length (cm)");
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Sepal Length (cm)")
 
       svg.selectAll(".dot")
-        .data(data)
-        .enter().append("path")
-        .attr("d", DOT_SHAPE)
-        .attr("transform", function(d) { return "translate(" + x(d.case_days_to_death) + "," + y(d.case_age_at_diagnosis) + ")"; })
-        .style("fill", "none")
-        .style("stroke", function(d) {
-          return color(d.case_pathologic_stage);
-        });
+      .data(data)
+      .enter().append("path")
+      .attr("d", DOT_SHAPE)
+      .attr("transform", function(d) { return "translate(" + x(d.case_days_to_death) + "," + y(d.case_age_at_diagnosis) + ")"; })
+      .style("fill", "none")
+      .style("stroke", function(d) {
+        return color(d.case_pathologic_stage);
+      });
+
+      svg.append("g")
+      .attr("class", "brush")
+      .call(d3.brushX()
+          .extent([[0, 0], [width, height]])
+          .on("end", brushended));
+
+      function brushended() {
+        if (!d3.event.sourceEvent) return; // Only transition after input.
+        if (!d3.event.selection) return; // Ignore empty selections.
+        var d0 = d3.event.selection.map(x.invert),
+            d1 = d0.map(d3.timeDay.round);
+
+        // If empty when rounded, use floor & ceil instead.
+        if (d1[0] >= d1[1]) {
+          d1[0] = d3.timeDay.floor(d0[0]);
+          d1[1] = d3.timeDay.offset(d1[0]);
+        }
+      }
+
 
       // var legend = svg.selectAll(".legend-wrapper")
       // .data(d3color.domain())
@@ -128,12 +148,5 @@ $(function () {
       // .attr("dy", ".35em")
       // .style("text-anchor", "end")
       // .text(function(d) { return d; });
-
-      svg.append("g")
-          .attr("class", "brush")
-          .call(d3.brushX()
-              .extent([[0, 0], [width, height]])
-              .on("end", brushended));
-
     });
   })
