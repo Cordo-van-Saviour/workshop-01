@@ -98,6 +98,7 @@ $(function () {
      */
 
 
+
     var brush = d3.select(".scatter-plot svg");
 
     height = height + 120;
@@ -161,6 +162,11 @@ $(function () {
 
             return "translate(" + x1 + "," + y1 + ")"
           })
+          .classed("hide", function(d) {
+            var x1 = x(d.case_days_to_death);
+
+            return x1 < 0;
+          });
       }
 
       // var legend = svg.selectAll(".legend-wrapper")
